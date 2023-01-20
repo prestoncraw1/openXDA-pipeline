@@ -288,7 +288,7 @@
       <ProgramFiles32 Condition="'$(ProgramFiles32)' == ''">$(ProgramFiles)</ProgramFiles32>
       <ProgramFiles64>$(ProgramW6432)</ProgramFiles64>
       <ProgramFiles64 Condition="'$(ProgramFiles64)' == ''">$(ProgramFiles)</ProgramFiles64>
-      <LocalFolder Condition="'$(LocalFolder)' == ''">C:\test\openXDA-jenkins</LocalFolder>
+      <LocalFolder Condition="'$(LocalFolder)' == ''">C:\ProgramData\Jenkins\.jenkins\workspace\openxda-pipelineTEST</LocalFolder>
       <BuildFlavor Condition="'$(BuildFlavor)' == ''">Release</BuildFlavor>
       <BuildTarget Condition="'$(BuildTarget)' == ''">Any CPU</BuildTarget>
       <BuildInParallel Condition="'$(BuildInParallel)' == ''">False</BuildInParallel>
@@ -331,12 +331,7 @@
   <Target Name="BeforeCreateWorkspace"/>
 
   <Target Name="CoreCreateWorkspace">
-    <!-- Create a workspace for the build. -->
-    <Message Text="Creating local build workspace..."/>
-    <RemoveDir Directories="$(LocalFolder)" Condition="Exists('$(LocalFolder)') And !Exists('$(LocalFolder)\.git')"/>
-    <MakeDir Directories="$(LocalFolder)" Condition="!Exists('$(LocalFolder)')"/>
-    <Exec Command="%22$(GitClient)%22 clone %22$(GitServer)%22 ." WorkingDirectory="$(LocalFolder)" Condition="!Exists('$(LocalFolder)\.git')"/>
-    <Exec Command="%22$(GitClient)%22 checkout %22$(GitBranch)%22" WorkingDirectory="$(LocalFolder)" Condition="'$(SetUpWorkspace)' != 'False'"/>
+    <!-- Deleted this for now as Jenkins automatically creates a workspace for us -->
   </Target>
 
   <Target Name="AfterCreateWorkspace"/>
