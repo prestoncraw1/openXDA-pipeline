@@ -338,7 +338,6 @@
   <Target Name="BeforeUpdateRepository"/>
 
   <Target Name="CoreUpdateRepository">
-    <Exec Command="%22$(NuGet)%22 restore %22$(LocalFolder)\$(ProjectSolution)%22"/>
     <CallTarget Targets="CheckForChanges"/>
   </Target>
 
