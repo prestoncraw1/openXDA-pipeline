@@ -478,7 +478,6 @@
   <Target Name="CorePushToServer" Condition="'$(DoNotPush)' == 'false' And '$(SkipVersioning)' != 'true'">
     <!-- Commit all of the pending changes. -->
     <Message Text="Pushing changes to Git server..." />
-    <Exec Command="%22$(GitClient)%22 push origin $(GitBranch):$(GitBranch)" WorkingDirectory="$(LocalFolder)" ContinueOnError="true"  />
   </Target>
 
   <Target Name="AfterPushToServer"/>
