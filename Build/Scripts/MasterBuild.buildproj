@@ -298,7 +298,7 @@
       <NuGet Condition="'$(NuGet)' == ''">$(ProgramFiles64)\NuGet\nuget.exe</NuGet>
       <GitClient Condition="'$(GitClient)' == ''">$(ProgramFiles32)\Git\cmd\git.exe</GitClient>
       <GitBranch Condition="'$(GitBranch)' == ''">master</GitBranch>
-	  <SetUpWorkspace Condition="'$(SetUpWorkspace)' == ''">True</SetUpWorkspace>
+	    <SetUpWorkspace Condition="'$(SetUpWorkspace)' == ''">True</SetUpWorkspace>
       <MSTest Condition="'$(MSTest)' == ''">$(VS140COMNTOOLS)\..\IDE\mstest.exe</MSTest>
       <!-- <SandcastleBuilder Condition="'$(SandcastleBuilder)' == ''">$(SHFBROOT)\SandcastleBuilderGUI.exe</SandcastleBuilder> -->
       <ForceBuild Condition="'$(ForceBuild)' == ''">false</ForceBuild>
@@ -386,15 +386,7 @@
   <Target Name="CoreBuildProjects">
     <!-- Build all of the specified projects. -->
     <Message Text="Compiling projects..."/>
-    <MSBuild Projects="@(ProjectsToBuild)" Properties="Configuration=$(BuildFlavor);Platform=$(BuildTarget);BuildInParallel=$(BuildInParallel)"/>
-
-    <!-- Create list of files to be deleted from build output. -->
-    <ItemGroup>
-      <FilesToDelete Include="$(BuildOutputFolder)\**\setup.exe"/>
-      <!-- <FilesToDelete Include="$(BuildOutputFolder)\**\*.pdb" Condition="'$(BuildFlavor)' == 'Release'"/> -->
-      <FilesToDelete Include="$(BuildOutputFolder)\**\*.vshost.exe"/>
-      <FilesToDelete Include="$(BuildOutputFolder)\**\*.vshost.exe.manifest"/>
-    </ItemGroup>
+    <MSBuild Projects="@(ProjectsToBuild)" Properties="Configuration=$(BuildFlavor);Platform=$(BuildTarget);BuildInParallel=$(BuildInParallel)"/> 
   </Target>
 
   <Target Name="AfterBuildProjects"/>
@@ -412,7 +404,6 @@
   <Target Name="CoreCleanBuild">
     <!-- Clean output of the current build. -->
     <Message Text="Cleaning build output..."/>
-    <Delete Files="@(FilesToDelete)" ContinueOnError="true"/>
   </Target>
 
   <Target Name="AfterCleanBuild"/>
