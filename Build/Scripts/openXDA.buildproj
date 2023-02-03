@@ -89,7 +89,7 @@
       <VersionRevisionChange>Increment</VersionRevisionChange>
 
       <!-- Override default settings. -->
-      <GitServer Condition="'$(GitServer)' == ''">https://github.com/prestoncraw1/openXDA-jenkins.git</GitServer>
+      <GitServer Condition="'$(GitServer)' == ''">https://github.com/prestoncraw1/openXDA-pipeline.git</GitServer>
     </PropertyGroup>
   </Target>
 
