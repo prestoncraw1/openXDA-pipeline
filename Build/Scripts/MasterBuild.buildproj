@@ -394,14 +394,7 @@
   <Target Name="BeforeDeployBuild"/>
 
   <Target Name="CoreDeployBuild" Condition="'$(BuildOutputFolder)' != '' And '$(BuildDeployFolder)' != ''">
-    <!-- Copy build content to the deploy folder. -->
-    <Message Text="Deploying build content..."/>
-    <ItemGroup>
-      <FilesToDeploy Include="$(BuildOutputFolder)\**\*.*"/>
-    </ItemGroup>
-    <MakeDir Directories="$(BuildDeployFolder)" Condition="!Exists('$(BuildDeployFolder)')"/>
-    <Folder TaskAction="RemoveContent" Path="$(BuildDeployFolder)"/>
-    <Copy SourceFiles="@(FilesToDeploy)" DestinationFolder="$(BuildDeployFolder)\%(FilesToDeploy.RecursiveDir)"/>
+    <!-- Jenkins -->
     <CallTarget Targets="ArchiveBuildOutput"/>
     <CallTarget Targets="ArchiveSource"/>
     <CallTarget Targets="DeployArchives"/>
