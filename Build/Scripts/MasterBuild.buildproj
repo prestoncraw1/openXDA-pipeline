@@ -350,23 +350,8 @@
   <Target Name="BeforeVersionSource"/>
 
   <Target Name="CoreVersionSource" Condition="'@(FilesToVersion)' != '' And '$(SkipVersioning)' != 'true'">
-    <!-- Update version number of the source code. -->
+    <!-- Jenkins -->
     <Message Text="Versioning source code..."/>
-    <Version VersionFile="$(VersionFile)" MajorType="$(VersionMajorChange)" MinorType="$(VersionMinorChange)" BuildType="$(VersionBuildChange)" RevisionType="$(VersionRevisionChange)">
-      <Output TaskParameter="Major" PropertyName="Major"/>
-      <Output TaskParameter="Minor" PropertyName="Minor"/>
-      <Output TaskParameter="Build" PropertyName="Build"/>
-      <Output TaskParameter="Revision" PropertyName="Revision"/>
-    </Version>
-    <FileUpdate Files="%(FilesToVersion.FullPath)" Regex="%(FilesToVersion.VersionRegex)" ReplacementText="${BeforeVersion}$(Major).$(Minor)%(FilesToVersion.VersionTag)${AfterVersion}" Condition="'%(FilesToVersion.VersionPrecision)' &lt;= '2'"/>
-    <FileUpdate Files="%(FilesToVersion.FullPath)" Regex="%(FilesToVersion.VersionRegex)" ReplacementText="${BeforeVersion}$(Major).$(Minor).$(Build)%(FilesToVersion.VersionTag)${AfterVersion}" Condition="'%(FilesToVersion.VersionPrecision)' == '3'"/>
-    <FileUpdate Files="%(FilesToVersion.FullPath)" Regex="%(FilesToVersion.VersionRegex)" ReplacementText="${BeforeVersion}$(Major).$(Minor).$(Build).$(Revision)%(FilesToVersion.VersionTag)${AfterVersion}" Condition="'%(FilesToVersion.VersionPrecision)' == '4'"/>
-    <PropertyGroup>
-      <BuildTag Condition="'$(BuildTag)' == ''">v$(Major).$(Minor).$(Build).$(Revision)-$(GitBranch)</BuildTag>
-    </PropertyGroup>
-    <Exec Command="%22$(GitClient)%22 add --all" WorkingDirectory="$(LocalFolder)" ContinueOnError="true"/>
-    <Exec Command="%22$(GitClient)%22 commit -m %22$(ProjectName): Version change for build $(BuildTag).%22" WorkingDirectory="$(LocalFolder)" ContinueOnError="true"/>
-    <Exec Command="%22$(GitClient)%22 tag -f %22$(BuildTag)%22" WorkingDirectory="$(LocalFolder)" ContinueOnError="true"/>
   </Target>
 
   <Target Name="AfterVersionSource"/>
@@ -403,20 +388,6 @@
   <Target Name="ArchiveBuildOutput" Condition="'@(BinariesToArchive)' != '' Or '@(InstallsToArchive)' != '' Or '@(ScriptsToArchive)' != ''">
     <!-- Create specified archives of build content. -->
     <Message Text="Archiving build content..."/>
-    <Copy SourceFiles="@(BinariesToArchive)" DestinationFolder="$(BinariesArchiveWorkingDirectory)\%(BinariesToArchive.RecursiveDir)"/>
-    <Copy SourceFiles="@(InstallsToArchive)" DestinationFolder="$(InstallsArchiveWorkingDirectory)\%(InstallsToArchive.RecursiveDir)"/>
-    <Copy SourceFiles="@(ScriptsToArchive)" DestinationFolder="$(ScriptsArchiveWorkingDirectory)\%(ScriptsToArchive.RecursiveDir)"/>
-    <ItemGroup>
-      <BinariesToArchive Remove="@(BinariesToArchive)"/>
-      <InstallsToArchive Remove="@(InstallsToArchive)"/>
-      <ScriptsToArchive Remove="@(ScriptsToArchive)"/>
-      <BinariesToArchive Include="$(BinariesArchiveWorkingDirectory)\**\*.*"/>
-      <InstallsToArchive Include="$(InstallsArchiveWorkingDirectory)\**\*.*"/>
-      <ScriptsToArchive Include="$(ScriptsArchiveWorkingDirectory)\**\*.*"/>
-    </ItemGroup>
-    <MSBuild.Community.Tasks.Zip Files="@(BinariesToArchive)" ZipFileName="$(BinariesArchiveFileName)" WorkingDirectory="$(BinariesArchiveWorkingDirectory)" Condition="'@(BinariesToArchive)' != ''"/>
-    <MSBuild.Community.Tasks.Zip Files="@(InstallsToArchive)" ZipFileName="$(InstallsArchiveFileName)" WorkingDirectory="$(InstallsArchiveWorkingDirectory)" Condition="'@(InstallsToArchive)' != ''"/>
-    <MSBuild.Community.Tasks.Zip Files="@(ScriptsToArchive)" ZipFileName="$(ScriptsArchiveFileName)" WorkingDirectory="$(ScriptsArchiveWorkingDirectory)" Condition="'@(ScriptsToArchive)' != ''"/>
     <ItemGroup>
       <Archives Include="$(LocalFolder)\*.zip"/>
     </ItemGroup>
@@ -425,15 +396,6 @@
   <Target Name="ArchiveSource" Condition="'@(SourcesToArchive)' != ''">
     <!-- Create archive of source tree. -->
     <Message Text="Archiving source code..."/>
-    <Copy SourceFiles="@(SourcesToArchive)" DestinationFolder="$(SourceArchiveWorkingDirectory)\%(SourcesToArchive.RecursiveDir)"/>
-    <ItemGroup>
-      <SourcesToArchive Remove="@(SourcesToArchive)"/>
-      <SourcesToArchive Include="$(SourceArchiveWorkingDirectory)\**\*.*"/>
-    </ItemGroup>
-    <MSBuild.Community.Tasks.Zip Files="@(SourcesToArchive)" ZipFileName="$(SourceArchiveFileName)" WorkingDirectory="$(SourceArchiveWorkingDirectory)" Condition="'@(SourcesToArchive)' != ''"/>
-    <ItemGroup>
-      <Archives Include="$(SourceArchiveFileName)"/>
-    </ItemGroup>
   </Target>
   
   <Target Name="DeployArchives" Condition="'@(Archives)' != ''">

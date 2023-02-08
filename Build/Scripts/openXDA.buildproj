@@ -123,8 +123,7 @@
   </Target>
 
   <Target Name="AfterExecuteUnitTests">
-    <!--Clean-up after all unit tests have been executed and passed.-->
-    <RemoveDir Directories="%(UnitTestAssemblies.RootDir)%(UnitTestAssemblies.Directory)" Condition="Exists('%(UnitTestAssemblies.RootDir)%(UnitTestAssemblies.Directory)')"/>
+    <!--Jenkins-->
   </Target>
 
   <Target Name="BeforeDeployBuild">
