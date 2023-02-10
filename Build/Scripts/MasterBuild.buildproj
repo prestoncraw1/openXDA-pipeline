@@ -289,7 +289,7 @@
       <ProgramFiles64>$(ProgramW6432)</ProgramFiles64>
       <ProgramFiles64 Condition="'$(ProgramFiles64)' == ''">$(ProgramFiles)</ProgramFiles64>
       <LocalFolder Condition="'$(LocalFolder)' == ''">C:\ProgramData\Jenkins\.jenkins\workspace\openxda-New</LocalFolder>
-      <GitServer Condition="'$(GitServer)' == ''">https://github.com/prestoncraw1/openXDA-jenkins.git</GitServer>
+      <GitServer Condition="'$(GitServer)' == ''">https://github.com/prestoncraw1/openXDA-pipeline.git</GitServer>
       <BuildFlavor Condition="'$(BuildFlavor)' == ''">Release</BuildFlavor>
       <BuildTarget Condition="'$(BuildTarget)' == ''">Any CPU</BuildTarget>
       <BuildInParallel Condition="'$(BuildInParallel)' == ''">False</BuildInParallel>
@@ -319,15 +319,6 @@
   <Target Name="AfterPrepareSettings"/>
   <Target Name="BeforeCheckEnvironment"/>
 
-  <Target Name="CoreCheckEnvironment">
-    <!-- Ensure that all required tools are installed. -->
-    <Message Text="Checking for required application..."/>
-
-    <Error Condition="'$(GitClient)' != '' And !Exists('$(GitClient)')" Text="Git Client is not installed."/>
-    <Error Condition="'$(MSTest)' != '' And !Exists('$(MSTest)')" Text="Unit testing tool is not installed."/>
-    <Error Condition="'$(SandcastleBuilder)' != '' And !Exists('$(SandcastleBuilder)')" Text="Sandcastle Builder is not installed."/>
-  </Target>
-
   <Target Name="AfterCheckEnvironment"/>
   <Target Name="BeforeCreateWorkspace"/>
 
@@ -339,7 +330,6 @@
   <Target Name="BeforeUpdateRepository"/>
 
   <Target Name="CoreUpdateRepository">
-    <CallTarget Targets="CheckForChanges"/>
   </Target>
 
   <Target Name="CheckForChanges" Condition="'$(ForceBuild)' != 'true'">
@@ -351,7 +341,6 @@
 
   <Target Name="CoreVersionSource" Condition="'@(FilesToVersion)' != '' And '$(SkipVersioning)' != 'true'">
     <!-- Jenkins -->
-    <Message Text="Versioning source code..."/>
   </Target>
 
   <Target Name="AfterVersionSource"/>
@@ -380,17 +369,12 @@
 
   <Target Name="CoreDeployBuild" Condition="'$(BuildOutputFolder)' != '' And '$(BuildDeployFolder)' != ''">
     <!-- Jenkins -->
-    <CallTarget Targets="ArchiveBuildOutput"/>
-    <CallTarget Targets="ArchiveSource"/>
-    <CallTarget Targets="DeployArchives"/>
+ 
   </Target>
 
   <Target Name="ArchiveBuildOutput" Condition="'@(BinariesToArchive)' != '' Or '@(InstallsToArchive)' != '' Or '@(ScriptsToArchive)' != ''">
     <!-- Create specified archives of build content. -->
     <Message Text="Archiving build content..."/>
-    <ItemGroup>
-      <Archives Include="$(LocalFolder)\*.zip"/>
-    </ItemGroup>
   </Target>
 
   <Target Name="ArchiveSource" Condition="'@(SourcesToArchive)' != ''">
@@ -399,7 +383,6 @@
   </Target>
   
   <Target Name="DeployArchives" Condition="'@(Archives)' != ''">
-    <Copy SourceFiles="@(Archives)" DestinationFolder="%(ArchiveDestinations.FullPath)" ContinueOnError="true"/>
   </Target>
 
   <Target Name="AfterDeployBuild"/>
@@ -408,6 +391,7 @@
   <Target Name="CorePushToServer" Condition="'$(DoNotPush)' == 'false' And '$(SkipVersioning)' != 'true'">
     <!-- Commit all of the pending changes. -->
     <Message Text="Pushing changes to Git server..." />
+      <Exec Command="%22$(GitClient)%22 push origin $(GitBranch):$(GitBranch)" WorkingDirectory="$(LocalFolder)" ContinueOnError="true"  />
   </Target>
 
   <Target Name="AfterPushToServer"/>
