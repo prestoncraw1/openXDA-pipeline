@@ -286,7 +286,6 @@
     <PropertyGroup>
       <ProgramFiles32>$(MSBuildProgramFiles32)</ProgramFiles32>
       <ProgramFiles32 Condition="'$(ProgramFiles32)' == ''">$(ProgramFiles)</ProgramFiles32>
-      
       <ProgramFiles64>$(ProgramW6432)</ProgramFiles64>
       <ProgramFiles64 Condition="'$(ProgramFiles64)' == ''">$(ProgramFiles)</ProgramFiles64>
       <LocalFolder Condition="'$(LocalFolder)' == ''">C:\ProgramData\Jenkins\.jenkins\workspace\openxda-New</LocalFolder>
